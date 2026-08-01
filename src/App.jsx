@@ -72,9 +72,18 @@ function App() {
       className="min-h-screen transition-[background] duration-700 ease-out"
       style={{ background: theme.bg }}
     >
-      <div className="flex">
-        {/* Barra lateral izquierda con la rueda */}
-        <aside className="w-52 flex-shrink-0 flex flex-col items-center pt-24 sticky top-0 h-screen">
+      <h1 className="text-4xl font-bold text-stone-100 tracking-wide text-center pt-8 pb-2 transition-colors duration-700 ease-out">
+        Hollow Knight{" "}
+        <span
+          className="transition-colors duration-700 ease-out"
+          style={{ color: theme.accent }}
+        >
+          Enemies
+        </span>
+      </h1>
+
+      <div className="flex flex-col md:flex-row">
+        <aside className="w-full md:w-52 flex-shrink-0 flex flex-col items-center pt-6 pb-2 md:pt-16 md:pb-0 md:sticky md:top-0 md:h-screen">
           <p className="text-xs uppercase tracking-widest text-neutral-500 mb-4">
             Zona
           </p>
@@ -88,24 +97,14 @@ function App() {
           )}
         </aside>
 
-        {/* Contenido principal */}
         <main className="flex-1 px-6 py-10">
-          <h1 className="text-4xl font-bold text-stone-100 tracking-wide text-center mb-4 transition-colors duration-700 ease-out">
-            Hollow Knight{" "}
-            <span
-              className="transition-colors duration-700 ease-out"
-              style={{ color: theme.accent }}
-            >
-              Enemies
-            </span>
-          </h1>
-
           <p
-            className="text-center mb-10 text-sm transition-colors duration-700 ease-out"
+            className="text-center mb-8 text-sm transition-colors duration-700 ease-out"
             style={{ color: theme.accent }}
           >
             {selectedArea || "Todas las zonas"}
           </p>
+
           <FilterBar
             nameFilter={nameFilter}
             onNameChange={setNameFilter}
@@ -134,19 +133,16 @@ function App() {
                 />
               ))}
             </div>
-            
           )}
         </main>
       </div>
 
-       <EnemyDetailModal
-         enemy={selectedEnemy}
-         onClose={() => setSelectedEnemy(null)}
-         accentColor={theme.accent}
-       />
-   );
+      <EnemyDetailModal
+        enemy={selectedEnemy}
+        onClose={() => setSelectedEnemy(null)}
+        accentColor={theme.accent}
+      />
     </div>
-    
   );
 }
 
