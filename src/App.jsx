@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import EnemyCard from "./components/EnemyCard";
 import { API_BASE_URL } from "./config/api";
 import { getTheme } from "./config/areaThemes";
@@ -65,7 +65,10 @@ function App() {
       return sortDirection === "desc" ? -comparison : comparison;
     });
 
-  const areas = [...new Set(enemies.map((e) => e.area))].sort();
+  const areas = useMemo(
+    () => [...new Set(enemies.map((e) => e.area))].sort(),
+    [enemies]
+  );
 
   return (
     <div
@@ -136,6 +139,19 @@ function App() {
           )}
         </main>
       </div>
+
+      <footer className="text-center text-xs text-neutral-500 py-6 px-4">
+        Hollow Knight, sus personajes e imágenes © Team Cherry. Imágenes obtenidas de la{" "}
+        <a
+          href="https://hollowknight.fandom.com/es/"
+          target="_blank"
+          rel="noreferrer"
+          className="underline hover:text-neutral-300"
+        >
+          Hollow Knight Wiki
+        </a>
+        . Proyecto de fan sin ánimo de lucro, no afiliado a Team Cherry.
+      </footer>
 
       <EnemyDetailModal
         enemy={selectedEnemy}

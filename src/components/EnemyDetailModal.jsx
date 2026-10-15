@@ -1,10 +1,11 @@
 import { X } from 'lucide-react';
-import { getIcon } from '../config/enemyIcons';
+import { EnemyTypeIcon } from '../config/enemyIcons';
+import { getEnemyImage } from '../config/enemyImages';
 
 function EnemyDetailModal({ enemy, onClose, accentColor }) {
   if (!enemy) return null;
 
-  const Icon = getIcon(enemy.type);
+  const image = getEnemyImage(enemy);
 
   return (
     <div
@@ -24,12 +25,16 @@ function EnemyDetailModal({ enemy, onClose, accentColor }) {
         </button>
 
         <div className="flex flex-col items-center text-center mb-4">
-          <div
-            className="w-20 h-20 rounded-full flex items-center justify-center mb-4 border-2"
-            style={{ borderColor: accentColor, backgroundColor: `${accentColor}1a` }}
-          >
-            <Icon size={40} style={{ color: accentColor }} />
-          </div>
+          {image ? (
+            <img src={image} alt={enemy.name} className="h-40 max-w-full object-contain mb-4" />
+          ) : (
+            <div
+              className="w-20 h-20 rounded-full flex items-center justify-center mb-4 border-2"
+              style={{ borderColor: accentColor, backgroundColor: `${accentColor}1a` }}
+            >
+              <EnemyTypeIcon type={enemy.type} size={40} style={{ color: accentColor }} />
+            </div>
+          )}
 
           <h2 className="text-2xl font-bold text-stone-100">{enemy.name}</h2>
           <p className="text-sm text-neutral-400 mt-1">{enemy.area}</p>

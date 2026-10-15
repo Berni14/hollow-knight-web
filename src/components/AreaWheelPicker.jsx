@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useCallback } from 'react';
+import { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 
 const ITEM_HEIGHT = 44;
 const VISIBLE_ITEMS = 5;
@@ -8,11 +8,13 @@ const WHEEL_COOLDOWN_MS = 10;
 
 function AreaWheelPicker({ areas, selectedArea, onSelect, accentColor }) {
   const containerRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const options = useMemo(() => ['Todas', ...areas], [areas]);
+  const [activeIndex, setActiveIndex] = useState(() =>
+    Math.max(0, selectedArea ? options.indexOf(selectedArea) : 0)
+  );
+  const initialIndex = useRef(activeIndex);
   const isWheelLocked = useRef(false);
   const isDragging = useRef(false);
-
-  const options = ['Todas', ...areas];
 
   const selectIndex = useCallback(
     (index) => {
@@ -55,12 +57,6 @@ function AreaWheelPicker({ areas, selectedArea, onSelect, accentColor }) {
     const container = containerRef.current;
     if (!container) return;
 
-    const handleScrollEnd = () => {
-      if (isDragging.current) return;
-      const index = Math.round(container.scrollTop / ITEM_HEIGHT);
-      setActiveIndex(index);
-    };
-
     let scrollTimeout;
     const handleScroll = () => {
       if (!isDragging.current) return;
@@ -81,13 +77,10 @@ function AreaWheelPicker({ areas, selectedArea, onSelect, accentColor }) {
     };
   }, [onSelect, options]);
 
+  // Al montar, colocamos la rueda en la zona seleccionada
   useEffect(() => {
-    const index = selectedArea ? options.indexOf(selectedArea) : 0;
-    if (index >= 0) {
-      containerRef.current?.scrollTo({ top: index * ITEM_HEIGHT, behavior: 'auto' });
-      setActiveIndex(index);
-    }
-  }, []); // solo al montar
+    containerRef.current?.scrollTo({ top: initialIndex.current * ITEM_HEIGHT, behavior: 'auto' });
+  }, []);
 
   return (
     <div className="relative" style={{ height: WHEEL_HEIGHT, width: 180 }}>
